@@ -28,7 +28,7 @@ vertex_shader_non_bonded = """
 uniform mat4 model_mat;
 uniform mat4 view_mat;
 
-const float xyz_offset = 0.5;
+const float xyz_offset = 0.2;
 
 in vec3 vert_coord;
 in vec3 vert_color;

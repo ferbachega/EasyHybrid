@@ -166,10 +166,12 @@ class ShowHideVisMol:
 class VisMolSession (ShowHideVisMol):
     """ Class doc """
 
-    def __init__ (self, glwidget = False, backend = 'gtk3'):
+    def __init__ (self, glwidget = False, backend = 'gtk3', main_session = None):
         """ Class initialiser """
         #self.vismol_objects         = [] # self.vismol_objects
         #self.vismol_objects_dic     = {} # self.vismol_objects_dic   
+        self.main_session = None
+        
         
         self.vismol_objects     = [] # old Vobjects
         self.vismol_objects_dic = {}
@@ -191,7 +193,7 @@ class VisMolSession (ShowHideVisMol):
                                       'stick_scale'                : 1.5      ,
                                       'ball_and_sick_sphere_scale' : 1        ,
                                       'antialias'                  : False    ,
-                                      'bg_color'                   : [0,0,0,1],
+                                      'bg_color'                   : [255,255,255,1],
                                       'center_on_coord_sleep_time' : 0.001    ,
 				      }
         
@@ -235,22 +237,22 @@ class VisMolSession (ShowHideVisMol):
         self.picking_selections =  vPick()
         
     
-    def build_gtkWidgets (self, gtk_mainwindow):
-        """ Function doc """
-        self.filechooser   = FileChooser(main_window = gtk_mainwindow)
-        self.main_treeview = GtkMainTreeView(vismolSession = self) 
+    
+    #def get_gtk_main_treeview (self):
+    #    """ Function doc """
+    #    self.main_treeview = GtkMainTreeView(vismolSession = self) 
+    #    self.main_treeview.treeView
+    #    return self.main_session.vismolSession.main_treeview.treeView
 
-    def refresh_gtk (self, 
-                     maintreeview = True
-                     ):
-        """ Function doc """
-        if maintreeview:
-            self.main_treeview.refresh_gtk_main_treeview()
 
-    def gtk_load (self):
-        """ Function doc """
-        filename = self.filechooser.open()
-        self.load(filename)
+    #def refresh_gtk (self, 
+    #                 maintreeview = True
+    #                 ):
+    #    """ Function doc """
+    #    if maintreeview:
+    #        #self.main_treeview.refresh_gtk_main_treeview()
+    #        self.main_session.vismolSession.main_treeview.treeView.refresh_gtk_main_treeview()
+    
 
     def command_line (self, entry = None):
         """ Function doc """
@@ -296,9 +298,9 @@ class VisMolSession (ShowHideVisMol):
         self.vismol_objects[-1].actived = True
         self.glwidget.queue_draw()
        
-        if self.backend == 'gtk3':
-            self.refresh_gtk(widget)
-
+        #if self.backend == 'gtk3':
+        #    self.refresh_gtk(widget)
+            
         
         
         

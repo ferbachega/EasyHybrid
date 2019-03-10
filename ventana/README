@@ -1,5 +1,0 @@
-Primeiro abrir um terminal na pasta ventana e depois usar o comando:
-
-g++ main.cxx MyDrawArea.cxx `pkg-config --cflags gtkglext-1.0 --libs gtk+-2.0` -lglut -o main
-
-para compilar. Depois rodar ./main para usar o binario

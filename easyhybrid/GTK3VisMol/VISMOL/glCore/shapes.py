@@ -510,7 +510,7 @@ def _make_sel_gl_lines(program, vismol_object = None):
     vismol_object.sel_line_buffers = (ind_vbo, coord_vbo, col_vbo)
     return True
 
-def _make_sel_gl_dots(program, vismol_object = None, bckgrnd_color= [0.0,0.0,0.0,1.0]):
+def _make_sel_gl_dots(program, vismol_object = None, bckgrnd_color= [1.0,1.0,1.0,1.0]):
     """ Function doc
     """
     colors    = vismol_object.color_indexes

@@ -90,13 +90,20 @@ class GtkMainTreeView():
         self.builder.add_from_file('GTK3VisMol/VISMOL/gtkWidgets/main_treeview.glade')
         self.builder.connect_signals(self)
         self.vismolSession = vismolSession
+        self.treeView = self.builder.get_object('treeview1')
         
+        #self.liststore = self.builder.get_object('liststore1')
+        self.liststore = Gtk.ListStore(bool, str, str, str, str)
+        
+        
+        self.treeView.set_model(self.liststore)
+
     def refresh_gtk_main_treeview (self):
         """ Function doc """
-        #print ('refresh_gtk_main_treeview',)
+        #print ('refresh_gtk_main_self.treeView',)
         #print (widget)
-        liststore = self.builder.get_object('liststore1')
-        model = liststore  
+        #liststore = self.builder.get_object('liststore1')
+        model = self.liststore  
         model.clear()
         n = 0
         i = 1
@@ -117,8 +124,7 @@ class GtkMainTreeView():
             model.append(data)
             i +=1
             n = n + 1
-        treeView = self.builder.get_object('treeview1')
-        treeView.set_model(liststore)
+        self.treeView.set_model(model)
         print ('load fuction finished')
         
     
@@ -144,7 +150,7 @@ class GtkMainTreeView():
             #model         = tree.get_model()
             #(model, iter) = selection.get_selected()
             #pymol_object = model.get_value(iter, 0)
-            self.refresh_gtk_main_treeview()
+            self.refresh_gtk_main_self.treeView()
             print ('button == 2')
             
             #self.selectedID  = int(model.get_value(iter, 1))  # @+

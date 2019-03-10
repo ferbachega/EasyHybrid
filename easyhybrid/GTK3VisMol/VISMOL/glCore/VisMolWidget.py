@@ -75,7 +75,7 @@ class VisMolWidget():
         self.mouse_x = 0.0
         self.mouse_y = 0.0
         self.selection_box = sb.SelectionBox()
-        self.bckgrnd_color = [0.0,0.0,0.0,1.0]
+        self.bckgrnd_color = [0.0,0.0,0.0,1.0] #[1.0,1.0,1.0,1.0] or [0.0,0.0,0.0,1.0]
         self.light_position = np.array([-2.5,2.5,3.0],dtype=np.float32)
         self.light_color = np.array([1.0,1.0,1.0,1.0],dtype=np.float32)
         self.light_ambient_coef = 0.5
@@ -804,6 +804,8 @@ class VisMolWidget():
         """ Function doc
         """
         GL.glEnable(GL.GL_DEPTH_TEST)
+        GL.glEnable(GL.GL_CULL_FACE)
+        GL.glCullFace(GL.GL_BACK)
         GL.glUseProgram(self.spheres_program)
         self.load_matrices(self.spheres_program, visObj.model_mat)
         self.load_lights(self.spheres_program)
@@ -882,41 +884,25 @@ class VisMolWidget():
         """ Function doc
         """
         GL.glEnable(GL.GL_DEPTH_TEST)
-        GL.glUseProgram(self.ribbons_program)
+        #GL.glEnable(GL.GL_BLEND)
+        #GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
+        #GL.glEnable(GL.GL_LINE_SMOOTH)
+        #GL.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST)
+        GL.glUseProgram(self.lines_program)
+        
+        
+        #GL.glLineWidth(self.vismolSession.gl_parameters['line_width']*80/abs(self.dist_cam_zrp))
         GL.glLineWidth(800/abs(self.dist_cam_zrp))
 
-        self.load_matrices(self.ribbons_program, visObj.model_mat)
-        self.load_fog(self.ribbons_program)
         
-        if visObj.ribbons_vao is not None:
+        self.load_matrices(self.lines_program, visObj.model_mat)
+        self.load_fog(self.lines_program)
+        #self.load_antialias_params(self.lines_program)
+        if visObj.lines_vao is not None:
             GL.glBindVertexArray(visObj.ribbons_vao)
             if self.modified_view:
                 pass
-                #GL.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, visObj.line_buffers[0])
-                #GL.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, visObj.line_indexes.itemsize*int(len(visObj.line_indexes)), visObj.line_indexes, GL.GL_DYNAMIC_DRAW)
-                #GL.glDrawElements(GL.GL_LINES, int(len(visObj.line_indexes)), GL.GL_UNSIGNED_INT, None)
-                #GL.glBindVertexArray(0)
-                #GL.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, 0)
-                #self.modified_data = False
-                
-                #- - - - -  SHOW HIDE - - - - -
-                #id self.modified_show:
-                    #GL.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, visObj.line_buffers[0])
-                    #GL.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, visObj.line_indexes.itemsize*int(len(visObj.line_indexes)), visObj.line_indexes, GL.GL_DYNAMIC_DRAW)
-                    #GL.glDrawElements(GL.GL_LINES, int(len(visObj.line_indexes)), GL.GL_UNSIGNED_INT, None)
-                    #GL.glBindVertexArray(0)
-                    #GL.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, 0)
-                    #self.modified_data = False
-                
-                # - - - - - COLOR - - - - -
-                #if self.modified_color:
-                    #GL.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, visObj.line_buffers[2])
-                    #GL.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, visObj.line_indexes.itemsize*int(len(visObj.line_indexes)), visObj.line_indexes, GL.GL_DYNAMIC_DRAW)
-                    #GL.glDrawElements(GL.GL_LINES, int(len(visObj.line_indexes)), GL.GL_UNSIGNED_INT, None)
-                    #GL.glBindVertexArray(0)
-                    #GL.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, 0)
-                    #self.modified_data = False
-           
+       
             else:
                 #coord_vbo = GL.glGenBuffers(1)
                 GL.glBindBuffer(GL.GL_ARRAY_BUFFER, visObj.ribbons_buffers[1])
@@ -928,10 +914,37 @@ class VisMolWidget():
         GL.glBindVertexArray(0)
         GL.glLineWidth(1)
         GL.glUseProgram(0)
-        #GL.glDisable(GL.GL_LINE_SMOOTH)
-        #GL.glDisable(GL.GL_BLEND)
+
         GL.glDisable(GL.GL_DEPTH_TEST)
     
+    
+    
+    #_draw_ribbons(self, visObj = None):
+	#GL.glEnable(GL.GL_DEPTH_TEST)
+	##GL.glUseProgram(self.ribbons_program)
+	#GL.glUseProgram(self.lines_program)
+	#GL.glLineWidth(800/abs(self.dist_cam_zrp))
+	##self.load_matrices(self.ribbons_program, visObj.model_mat)
+	#self.load_matrices(self.lines_program, visObj.model_mat)
+	##self.load_fog(self.ribbons_program)
+	#self.load_fog(self.lines_program)
+    #
+	#if visObj.ribbons_vao is not None:
+	#    GL.glBindVertexArray(visObj.ribbons_vao)
+	#    if self.modified_view:
+	#	pass
+	#else:
+	#    #coord_vbo = GL.glGenBuffers(1)
+	#    GL.glBindBuffer(GL.GL_ARRAY_BUFFER, visObj.ribbons_buffers[1])
+	#    GL.glBufferData(GL.GL_ARRAY_BUFFER, visObj.frames[self.frame].itemsize*int(len(visObj.frames[self.frame])), visObj.frames[self.frame], GL.GL_STATIC_DRAW)              
+	#    #GL.glDrawElements(GL.GL_LINES, int(len(visObj.index_bonds)*2), GL.GL_UNSIGNED_INT, None)
+	#    GL.glDrawElements(GL.GL_LINES, int(len(visObj.ribbons_Calpha_indexes_rep)*2), GL.GL_UNSIGNED_INT, None)
+	#GL.glBindVertexArray(0)
+	#GL.glLineWidth(1)
+	#GL.glUseProgram(0)
+	##GL.glDisable(GL.GL_LINE_SMOOTH)
+	##GL.glDisable(GL.GL_BLEND)
+	#GL.glDisable(GL.GL_DEPTH_TEST)
     
     
     def _draw_lines(self, visObj = None):

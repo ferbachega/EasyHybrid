@@ -4,6 +4,11 @@ from gi.repository import Gtk, Gdk
 
 from VISMOL.gtkWidgets.main_treeview import GtkMainTreeView
 
+#from VISMOL.gtkWidgets.main_treeview import GtkMainTreeView
+from GTKGUI.gtkWidgets import FileChooser
+
+
+
 
 class ConsoleWindow:
     """ Class doc """
@@ -46,11 +51,6 @@ class ConsoleWindow:
             end = self.textbuffer.get_end_iter()
             source = self.textbuffer.get_text(start, end, False)
             print (source)
-            #"""run our code in the textview widget, put output in the terminal we may want to put this into the gui somewhere"""
-            #print self.interpreter.runsource(source, "<<console>>")
-
-
-
 
 class AnimatedWindow:
     """ Class doc """
@@ -60,7 +60,6 @@ class AnimatedWindow:
         self.actived =  False
         self.main_window = main_window
         #self.EMSession =  GTKSession.EMSession
-    
     def open_window (self, text = None):
         """ Function doc """
         if self.actived  ==  False:
@@ -81,7 +80,6 @@ class AnimatedWindow:
 
             scale.set_digits(actual_frame)                        
             #gtk.main()
-
     def on_TrajectoryTool_HSCALE_update (self, MIN = 1, MAX = 100):
         """ Function doc """
         #MAX  = int(self.builder.get_object('trajectory_max_entrey').get_text())
@@ -105,13 +103,6 @@ class AnimatedWindow:
         """ Function doc """
         self.actived  =  False
         self.main_window.builder.get_object('toolbutton_trajectory_tool').set_active(False)
-
-
-
-
-
-
-
 
 class GTKTerminalGUI():
     def __init__ (self, vismolSession = None):
@@ -138,44 +129,169 @@ class GTKTerminalGUI():
     def on_key_pressed (self, widget, click=None):
         print (click)
         
-        
-class GTKGUI ():
+
+
+
+
+class MainMenu:
     """ Class doc """
     
-    def test_gl (self, widget):
+    def __init__ (self):
+        """ Class initialiser """
+        pass
+
+
+class ToolBar:
+    """ Class doc """
+    
+    def __init__ (self):
+        """ Class initialiser """
+        pass
+    
+    def on_button_pDynamo (self, widget, click=None):
         """ Function doc """
-        self.vismolSession.glwidget.test_gl()
+        print ("Save")
+        #'''
         
+        import glob, math, os.path
+
+        from pBabel                    import ExportSystem                                 , \
+                                              ImportCoordinates3                           , \
+                                              ImportSystem                                 , \
+                                              SMILES_ToSystem                              , \
+                                              SystemGeometryTrajectory                     , \
+                                              SystemRestraintTrajectory
+        from pCore                     import Clone                                        , \
+                                              logFile                                      , \
+                                              Selection                                    , \
+                                              TestScript_InputDataPath                     , \
+                                              TestScript_OutputDataPath                    , \
+                                              XHTMLLogFileWriter
+        from pMolecule                 import RestraintDistance                            , \
+                                              RestraintEnergyModelHarmonic                 , \
+                                              RestraintEnergyModelHarmonicRange            , \
+                                              RestraintModel                               , \
+                                              RestraintTether                              , \
+                                              System                                       , \
+                                              SystemGeometryObjectiveFunction
+        from pMolecule.MMModel         import MMModelOPLS
+        from pMolecule.NBModel         import NBModelCutOff                                , \
+                                              NBModelFull                                  , \
+                                              NBModelMonteCarlo                            , \
+                                              NBModelORCA                                  , \
+                                              PairwiseInteractionABFS
+        from pMolecule.QCModel         import DIISSCFConverger                             , \
+                                              QCModelMNDO
+        from pScientific               import Constants                                    , \
+                                              Units
+        from pScientific.Arrays        import ArrayPrint2D
+        from pScientific.Geometry3     import PairListGenerator                            , \
+                                              Vector3
+        from pScientific.RandomNumbers import NormalDeviateGenerator                       , \
+                                              RandomNumberGenerator
+        from pScientific.Statistics    import Statistics
+        from pScientific.Symmetry      import CrystalSystemCubic                           , \
+                                              PeriodicBoundaryConditions                   , \
+                                              SymmetryParameters
+        from pSimulation               import BakerSaddleOptimize_SystemGeometry           , \
+                                              BuildCubicSolventBox                         , \
+                                              BuildHydrogenCoordinates3FromConnectivity    , \
+                                              BuildSolventBox                              , \
+                                              ChainOfStatesOptimizePath_SystemGeometry     , \
+                                              ConjugateGradientMinimize_SystemGeometry     , \
+                                              GrowingStringInitialPath                     , \
+                                              LeapFrogDynamics_SystemGeometry              , \
+                                              MergeByAtom                                  , \
+                                              MonteCarlo_IsolateInteractionEnergy          , \
+                                              MonteCarlo_ScaleIsolateInteractionParameters , \
+                                              MonteCarlo_SystemGeometry                    , \
+                                              NormalModes_SystemGeometry                   , \
+                                              NormalModesTrajectory_SystemGeometry         , \
+                                              PruneByAtom                                  , \
+                                              RadialDistributionFunction                   , \
+                                              SelfDiffusionFunction                        , \
+                                              SolventCubicBoxDimensions                    , \
+                                              SolvateSystemBySuperposition                 , \
+                                              SteepestDescentPath_SystemGeometry           , \
+                                              SystemDensity                                , \
+                                              ThermodynamicsRRHO_SystemGeometry            , \
+                                              VelocityVerletDynamics_SystemGeometry        , \
+                                              WHAM_ConjugateGradientMinimize
+
+        # . Local name.
+        _name  = "book"
+
+        # . The input data paths.
+        dataPath = TestScript_InputDataPath ( _name )
+        molPath  = os.path.join ( dataPath, "mol" )
+        pdbPath  = os.path.join ( dataPath, "pdb" )
+        pklPath  = os.path.join ( dataPath, "pkl" )
+        xyzPath  = os.path.join ( dataPath, "xyz" )
+
+        # . The output data path.
+        scratchPath = TestScript_OutputDataPath ( _name )
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        molecule = ImportSystem ( os.path.join ( xyzPath, "bala_c7eq.xyz" ) )
+        molecule.DefineQCModel ( QCModelMNDO.WithOptions ( hamiltonian = "am1" ) )
+        molecule.Summary ( )
+
+        # . Save a copy of the starting coordinates.
+        coordinates3 = Clone ( molecule.coordinates3 )
+
+        # . Determine the starting energy.
+        eStart = molecule.Energy ( )
+
+        # . Optimization.
+        ConjugateGradientMinimize_SystemGeometry ( molecule                    ,
+                                                   logFrequency         =  1   ,
+                                                   maximumIterations    =  5   ,
+                                                   rmsGradientTolerance =  0.1 )
+
+        # . Determine the final energy.
+        eStop = molecule.Energy ( )
+
+        # . Determine the RMS coordinate deviation between the optimized and unoptimized structures.
+        masses = molecule.atoms.GetItemAttributes ( "Mass" )
+        coordinates3.Superimpose ( molecule.coordinates3, weights = masses )
+        rms = coordinates3.RootMeanSquareDeviation ( molecule.coordinates3, weights = masses )
+
+        # . Print the results.
+        table = logFile.GetTable ( columns = [ 30, 30 ] )
+        table.Start ( )
+        table.Title ( "Minimization Results" )
+        table.Entry ( "Energy Change",            alignment = "l" )
+        table.Entry ( "{:20.4f}".format ( eStop - eStart ) )
+        table.Entry ( "RMS Coordinate Deviation", alignment = "l" )
+        table.Entry ( "{:20.4f}".format ( rms ) )
+        table.Stop ( )
+        #XYZFile_FromSystem ( xyzPath, molecule, label = 'text.xyz', xyz = 'text_name.xyz' )
+        
+        #self.vismolSession.load (infile = os.path.join ( xyzPath, "bala_c7eq.xyz" ) )
+        #self.main_treeview.refresh_gtk_main_treeview()
+        #visObj = self.vismolSession.vismol_objects[-1]
+        #self.vismolSession.glwidget.vm_widget.center_on_coordinates(visObj, visObj.mass_center)
+        
+        
+        #self.vismolSession.glwidget.render()
+        #self.vismolsession.refresh_gtk()
+        #'''
+    
     def on_file_open_activate (self, widget, click=None):
         """ Function doc """
-        filename = self.vismolSession.gtk_load()
-        self.main_treeview.refresh_gtk_main_treeview()
-        #self.vismolSession.refresh_gtk_main_treeview()
-        #liststore = self.main_treeview.builder.get_object('liststore1')
-        #model = liststore  
-        #model.clear()
-        #n = 0
-        #i = 1
-        #
-        #for vis_object in self.vismolSession.vismol_objects:
-        #    print ('\n\n',vis_object.name,'\n\n')
-        #    
-        #    if vis_object.actived:
-        #        actived = True
-        #    else:
-        #        actived = False
-        #
-        #    data = [actived, str(i)        ,
-        #           vis_object.name      , 
-        #           str(len(vis_object.atoms)) , 
-        #           str(len(vis_object.frames)),
-        #           ]
-        #    model.append(data)
-        #    i +=1
-        #    n = n + 1
-        #print ('load fuction finished')        
-
-    
+        self.gtk_load_files()
+        
     def on_terminal_button (self, widget, click=None):
         """ Function doc """
         #print ("terminal")
@@ -186,81 +302,6 @@ class GTKGUI ():
             print ('desligado')
             self.vismolConsole.window.destroy()
             self.vismolConsole.actived =  False
-        
-        
-        #    #self.gtkTerminalGui.TerminalBox.show()
-        #    self.textarea.show()
-        #else:
-        #    #self.gtkTerminalGui.TerminalBox.hide()
-        #    self.textarea.hide()
-        #
-        #if widget == self.builder.get_object('toolbutton_trajectory_tool'):
-        #    if widget.get_active() == True:
-        #        self.TrajectoryTool.open_window()
-        #        self.TrajectoryTool.actived =  True
-        #    else:
-        #        print ('desligado')
-        #        self.TrajectoryTool.window.destroy()
-        #        self.TrajectoryTool.actived =  False
-
-
-
-
-    '''
-    def on_treeview_Objects_button_release_event(self, tree, event):
-        if event.button == 3:
-            selection     = tree.get_selection()
-            model         = tree.get_model()
-            (model, iter) = selection.get_selected()
-            if iter != None:
-                self.selectedID  = str(model.get_value(iter, 1))  # @+
-                self.selectedObj = str(model.get_value(iter, 2))
-    
-                self.builder.get_object('TreeViewObjLabel').set_label('- ' +self.selectedObj+' -' )
-
-                widget = self.builder.get_object('treeview_menu')
-                widget.popup(None, None, None, None, event.button, event.time)
-                print ('button == 3')
-
-
-        if event.button == 2:
-            selection     = tree.get_selection()
-            model         = tree.get_model()
-            (model, iter) = selection.get_selected()
-            pymol_object = model.get_value(iter, 0)
-            print ('button == 2', pymol_object)
-            
-            self.selectedID  = int(model.get_value(iter, 1))  # @+
-            self.vismolSession.center(Vobject_index = self.selectedID -1)
-
-        if event.button == 1:
-            selection     = tree.get_selection()
-            model         = tree.get_model()
-            (model, iter) = selection.get_selected()
-            print ('button == 1')
-
-            if iter != None:
-                #print model, iter
-                pymol_object  = model.get_value(iter, 2)  # @+
-                true_or_false = model.get_value(iter, 0)
-                obj_index     = model.get_value(iter, 1)
-                #print pymol_object
-                if true_or_false == False:
-                    self.vismolSession.enable_by_index(int(obj_index)-1)
-                    true_or_false = True
-                    model.set(iter, 0, true_or_false)
-                    # print true_or_false
-                    self.vismolSession.glwidget.queue_draw()
-                
-                else:
-                    self.vismolSession.disable_by_index(int(obj_index)-1)
-                    true_or_false = False
-                    model.set(iter, 0, true_or_false)
-                    self.vismolSession.glwidget.queue_draw()
-    
-    '''
-
-        
     
     def on_main_toolbar_open_animate_trajectory (self, widget):
         """ Function doc """
@@ -275,6 +316,39 @@ class GTKGUI ():
                 self.TrajectoryTool.actived =  False
                 #cmd.set('valence', 0.0)
                 #self.builder.get_object('handlebox1').hide()
+
+class GLMenu:
+    """ Class doc """
+    
+    def __init__ (self):
+        """ Class initialiser """
+        pass
+
+class GTKGUI (MainMenu,ToolBar,GLMenu):
+    """ Class doc """
+    
+
+    
+    def test_gl (self, widget):
+        """ Function doc """
+        self.vismolSession.glwidget.test_gl()
+        
+
+
+    def gtk_load_files (self):
+        """ Function doc """
+        filename = self.filechooser.open()
+        if filename:
+            self.vismolSession.load(filename)
+            self.main_treeview.refresh_gtk_main_treeview()
+            visObj = self.vismolSession.vismol_objects[-1]
+            self.vismolSession.glwidget.vm_widget.center_on_coordinates(visObj, visObj.mass_center)
+        else:
+            pass
+    
+
+               
+
     
     def on_treemenu_item_selection (self, widget):
         """ Function doc """
@@ -313,12 +387,27 @@ class GTKGUI ():
         self.window = self.builder.get_object('window1')
         
         self.main_treeview =  GtkMainTreeView(vismolSession = vismolSession)
+        self.main_treeview.treeView
+        
+        #self.main_treeview =  self.vismolSession.get_gtk_main_treeview ()
+        #get_gtk_main_treeview (self)
+        
         self.builder.get_object('notebook1').append_page(self.main_treeview.builder.get_object('scrolledwindow1'))
                                                          #'Objects')
 
-
-        self.vismolSession = vismolSession
-        self.vismolSession.build_gtkWidgets(self.builder.get_object("window1"))
+        
+        
+        self.vismolSession = vismolSession#( main_session = None)
+        self.vismolSession.main_session = self
+        #self.vismolSession.build_gtkWidgets(self.builder.get_object("window1"))
+        
+        
+        #self.main_treeview =  self.vismolSession.get_gtk_main_treeview ()
+        #scrolledwindow1 = Gtk.ScrolledWindow()
+        #scrolledwindow1.add(self.main_treeview) 
+        
+        #self.builder.get_object('notebook1').append_page(scrolledwindow1)
+        
         
         if self.vismolSession is not None:
             
@@ -332,9 +421,10 @@ class GTKGUI ():
         #self.window.set_size_request(800,800)
 
         self.window.show_all()
-        #animated_window = AnimatedWindow(self)
         self.TrajectoryTool = AnimatedWindow(self)
         self.vismolConsole  = ConsoleWindow(self)
+        self.filechooser    = FileChooser()
+        
         #self.window.set_keep_above (self.window)
         #self.builder.get_object('notebook2').hide()
         #self.builder.get_object('notebook1').hide()

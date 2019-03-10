@@ -279,6 +279,7 @@
                     <property name="label" translatable="yes">save</property>
                     <property name="use_underline">True</property>
                     <property name="icon_widget">image3</property>
+                    <signal name="clicked" handler="on_button_pDynamo" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
