@@ -1010,43 +1010,43 @@ class VisMolWidget():
         GL.glDisable(GL.GL_DEPTH_TEST)
     
     
-    def _draw_lines2(self, visObj = None):
-        """ Doesn't work  - 
-        """
-        GL.glEnable(GL.GL_DEPTH_TEST)
-        GL.glUseProgram(self.lines_program)
-     
-        #GL.glLineWidth(self.vismolSession.gl_parameters['line_width']*80/abs(self.dist_cam_zrp))
-        GL.glLineWidth(80/abs(self.dist_cam_zrp))
-
-        self.load_matrices(self.lines_program, visObj.model_mat)
-        self.load_fog(self.lines_program)
-        #self.load_antialias_params(self.lines_program)
-        
-        if visObj.line_representation.vao is not None:
-            GL.glBindVertexArray(visObj.line_representation.vao)
-            if self.modified_view:
-                pass
-            else:
-                #coord_vbo = GL.glGenBuffers(1)
-                GL.glBindBuffer(GL.GL_ARRAY_BUFFER, visObj.line_representation.coord_vbo)
-                #GL.glBindBuffer(GL.GL_ARRAY_BUFFER, visObj.line_buffers[1])
-                
-                
-                GL.glBufferData(GL.GL_ARRAY_BUFFER                                                    , 
-                                visObj.frames[self.frame].itemsize*int(len(visObj.frames[self.frame])), 
-                                visObj.frames[self.frame]                                             , 
-                                GL.GL_STATIC_DRAW                                                     )   
-                                           
-                #GL.glDrawElements(GL.GL_LINES, int(len(visObj.index_bonds)*2), GL.GL_UNSIGNED_INT, None)
-                
-                GL.glDrawElements(GL.GL_LINES, int(len(visObj.index_bonds)), GL.GL_UNSIGNED_INT, None)
-        GL.glBindVertexArray(0)
-        GL.glLineWidth(1)
-        GL.glUseProgram(0)
-        #GL.glDisable(GL.GL_LINE_SMOOTH)
-        #GL.glDisable(GL.GL_BLEND)
-        GL.glDisable(GL.GL_DEPTH_TEST)
+    #def _draw_lines2(self, visObj = None):
+        #""" Doesn't work  - 
+        #"""
+        #GL.glEnable(GL.GL_DEPTH_TEST)
+        #GL.glUseProgram(self.lines_program)
+		#
+        ##GL.glLineWidth(self.vismolSession.gl_parameters['line_width']*80/abs(self.dist_cam_zrp))
+        #GL.glLineWidth(80/abs(self.dist_cam_zrp))
+		#
+        #self.load_matrices(self.lines_program, visObj.model_mat)
+        #self.load_fog(self.lines_program)
+        ##self.load_antialias_params(self.lines_program)
+        #
+        #if visObj.line_representation.vao is not None:
+        #    GL.glBindVertexArray(visObj.line_representation.vao)
+        #    if self.modified_view:
+        #        pass
+        #    else:
+        #        #coord_vbo = GL.glGenBuffers(1)
+        #        GL.glBindBuffer(GL.GL_ARRAY_BUFFER, visObj.line_representation.coord_vbo)
+        #        #GL.glBindBuffer(GL.GL_ARRAY_BUFFER, visObj.line_buffers[1])
+        #        
+        #        
+        #        GL.glBufferData(GL.GL_ARRAY_BUFFER                                                    , 
+        #                        visObj.frames[self.frame].itemsize*int(len(visObj.frames[self.frame])), 
+        #                        visObj.frames[self.frame]                                             , 
+        #                        GL.GL_STATIC_DRAW                                                     )   
+        #                                   
+        #        #GL.glDrawElements(GL.GL_LINES, int(len(visObj.index_bonds)*2), GL.GL_UNSIGNED_INT, None)
+        #        
+        #        GL.glDrawElements(GL.GL_LINES, int(len(visObj.index_bonds)), GL.GL_UNSIGNED_INT, None)
+        #GL.glBindVertexArray(0)
+        #GL.glLineWidth(1)
+        #GL.glUseProgram(0)
+        ##GL.glDisable(GL.GL_LINE_SMOOTH)
+        ##GL.glDisable(GL.GL_BLEND)
+        #GL.glDisable(GL.GL_DEPTH_TEST)
     
     def _draw_sticks(self, visObj = None):
         """ Function doc
